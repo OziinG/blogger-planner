@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>게시물 세부 내용</title>
+<link rel="stylesheet" th:href="@{/css/planner.css}" />
+</head>
+<body>
+    <div class="container">
+        <h2>게시물 세부 내용</h2>
+        <form id="frm" method="post" enctype="multipart/form-data" th:action="@{/planner/{plannerIdx}(plannerIdx=${planner.plannerIdx})}">
+            <input type="hidden" id="plannerIdx" name="plannerIdx" th:value="${planner.plannerIdx}" />
+            <input type="hidden" id="method" name="_method" />
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+
+            <table class="board_detail">
+                <colgroup>
+                    <col width="15%" />
+                    <col width="*" />
+                    <col width="15%" />
+                    <col width="35%" />
+                </colgroup>
+                <tr>
+                    <th scope="row">글 번호</th>
+                    <td th:text="${planner.plannerIdx}"></td>
+                    <th scope="row">조회수</th>
+                    <td th:text="${planner.hitCnt}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">작성자</th>
+                    <td th:text="${planner.creatorId}"></td>
+                    <th scope="row">작성일</th>
+                    <td th:text="${planner.createdDatetime}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">제목</th>
+                    <td colspan="3"><input type="text" id="title" name="title" th:value="${planner.title}" /></td>
+                </tr>
+                <tr>
+                    <th scope="row">시작 날짜</th>
+                    <td colspan="3"><input type="date" id="startDate" name="startDate" th:value="${planner.startDate}" /></td>
+                </tr>
+                <tr>
+                    <th scope="row">종료 날짜</th>
+                    <td colspan="3"><input type="date" id="endDate" name="endDate" th:value="${planner.endDate}" /></td>
+                </tr>
+                <tr>
+                    <th scope="row">지역</th>
+                    <td colspan="3"><input type="text" id="location" name="location" th:value="${planner.location}" /></td>
+                </tr>
+                <tr>
+                    <td colspan="4"><textarea id="contents" name="contents" th:text="${planner.contents}"></textarea></td>
+                </tr>
+                <tr>
+                    <th scope="row">상세 설명</th>
+                    <td colspan="4"><textarea id="details" name="details" th:text="${planner.details}"></textarea></td>
+                </tr>
+                <tr>
+                    <th scope="row">파일 업로드</th>
+                    <td colspan="4"><input type="file" id="file" name="file" multiple /></td>
+                </tr>
+            </table>
+        </form>
+
+        <div class="file_list">
+            <a th:each="fileInfo : ${planner.fileInfoList}"
+               th:text="|${fileInfo.originalFileName} (${#numbers.formatInteger(T(java.lang.Integer).parseInt(fileInfo.fileSize)/1024, 1, 'DEFAULT')}kb)|"
+               th:href="|/planner/file/${fileInfo.planner.plannerIdx}/${fileInfo.idx}|"></a>
+        </div>
+
+        <input type="button" id="list" class="btn" value="목록으로" /> 
+        <input type="button" id="update" class="btn" value="수정하기" /> 
+        <input type="button" id="delete" class="btn" value="삭제하기" />
+
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script>
+            $(function() {
+                $('#list').on('click', function() {
+                    location.href = "/planner";
+                });
+                $('#update').on('click', function() {
+                    $('#method').val('PUT');
+                    let frm = $('#frm')[0];
+                    frm.action = "/planner/" + $("#plannerIdx").val();
+                    frm.submit();
+                });
+                $('#delete').on('click', function() {
+                    $('#method').val("DELETE");
+                    let frm = $('#frm')[0];
+                    frm.action = "/planner/" + $("#plannerIdx").val();
+                    frm.submit();
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>플래너 작성</title>
+</head>
+<body>
+    <div class="container">
+        <h2>플래너 작성 페이지</h2>
+        <form method="POST" action="/planner/write" enctype="multipart/form-data">
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+            <div>
+                <label for="title">제목</label>
+                <input type="text" id="title" name="title" required />
+            </div>
+            <div>
+                <label for="contents">요약 설명</label>
+                <textarea id="contents" name="contents" required></textarea>
+            </div>
+            <div>
+                <label for="details">상세 설명</label>
+                <textarea id="details" name="details"></textarea>
+            </div>
+            <div>
+                <label for="startDate">시작 날짜</label>
+                <input type="date" id="startDate" name="startDate" required />
+            </div>
+            <div>
+                <label for="endDate">종료 날짜</label>
+                <input type="date" id="endDate" name="endDate" required />
+            </div>
+            <div>
+                <label for="location">지역</label>
+                <input type="text" id="location" name="location" required />
+            </div>
+            <div>
+                <label for="file">파일 업로드</label>
+                <input type="file" id="file" name="file" multiple />
+            </div>
+            <button type="submit">작성</button>
+        </form>
+    </div>
+</body>
+</html>

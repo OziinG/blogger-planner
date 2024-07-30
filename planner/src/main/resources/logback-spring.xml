@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration debug="true">
+	<springProfile name="dev">
+		<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+			<encoder>
+				<Pattern>%d %5p {%c} %m%n</Pattern>
+			</encoder>
+		</appender>
+
+		<appender name="console-infolog"
+			class="ch.qos.logback.core.ConsoleAppender">
+			<encoder>
+				<Pattern>%d %5p %m%n</Pattern>
+			</encoder>
+		</appender>
+
+
+    <logger name="jdbc.sqlonly" level="info" appender-ref="console" />
+    <logger name="jdbc.sqltiming" level="info" appender-ref ="console" />    
+    <logger name="jdbc.resultsettable" level="info" appender-ref ="console" />
+
+    <!-- Additional loggers -->
+    <logger name="org.springframework.security" level="DEBUG" />
+
+		<root level="info">
+			<appender-ref ref="console" />
+		</root>
+	</springProfile>
+
+
+	<springProfile name="prod">
+		<appender name="file"
+			class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<file>planner.log</file>
+			<rollingPolicy
+				class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<fileNamePattern>planner-%d{yyyy-MM-dd}.log</fileNamePattern>
+				<maxHistory>30</maxHistory>
+			</rollingPolicy>
+			<encoder>
+				<Pattern>%d %5p {%c} %m%n</Pattern>
+			</encoder>
+		</appender>
+
+		<logger name="planner" level="debug" appender-ref="file"></logger>
+
+		<root level="off">
+			<appender-ref ref="file" />
+		</root>
+	</springProfile>
+</configuration>
