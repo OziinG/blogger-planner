@@ -41,8 +41,6 @@ export default function PlannerWrite() {
 
     Object.values(files).forEach(file => formData.append('files', file));
 
-    const handlerSubmit = e => {
-        e.preventDefault();
         axios({
             method: 'POST',
             url: 'http://localhost:8080/api/planner',
