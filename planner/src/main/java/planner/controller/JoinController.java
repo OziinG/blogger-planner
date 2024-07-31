@@ -10,10 +10,10 @@ import planner.service.JoinService;
 
 @Controller
 public class JoinController {
-	@Autowired
-	JoinService joinService;
-	
-	@GetMapping("/join")
+    @Autowired
+    JoinService joinService;
+    
+    @GetMapping("/join")
 	public String join() {
 		return "/join";
 	}

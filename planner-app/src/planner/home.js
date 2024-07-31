@@ -1,13 +1,10 @@
 import React from "react";
-import { Link } from "../../node_modules/react-router-dom/dist/index";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
     <div className="container">
       <header>
-        <h1>
-          <a href="/">Planner</a>
-        </h1>
       </header>
       <h2>홈 페이지 입니다.</h2>
       <p>

@@ -1,40 +1,51 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "../../node_modules/react-router-dom/dist/index";
-import axios from "../../node_modules/axios/index";
+import { useEffect, useState, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 export default function PlannerDetail() {
   const [planner, setPlanner] = useState({});
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
-
+  const [details, setDetails] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [location, setLocation] = useState("");
+  const refFiles = useRef();
   const { plannerIdx } = useParams();
-
   const navigate = useNavigate();
 
   const listButtonClick = (e) => {
     e.preventDefault();
-    navigate("/planner"); // 또는 navigate('/list') 또는 navigate(-1)
+    navigate("/planner");
   };
+
   const updateButtonClick = (e) => {
     e.preventDefault();
 
+    const updatedPlanner = {
+      title,
+      contents,
+      details,
+      startDate,
+      endDate,
+      location,
+    };
+
     axios
-      .put(`http://localhost:8080/api/planner/${plannerIdx}`, {
-        title,
-        contents,
-      })
+      .put(`http://localhost:8080/api/planner/${plannerIdx}`, updatedPlanner)
       .then((res) => {
-        res && res.status === 200 && navigate("/");
+        res && res.status === 200 && navigate("/planner");
       })
       .catch((err) => console.log(err));
   };
+
   const deleteButtonClick = (e) => {
     e.preventDefault();
 
     axios
       .delete(`http://localhost:8080/api/planner/${plannerIdx}`)
       .then((res) => {
-        res && res.status === 200 && navigate("/");
+        res && res.status === 204 && navigate("/planner");
       })
       .catch((err) => console.log(err));
   };
@@ -43,19 +54,31 @@ export default function PlannerDetail() {
     axios
       .get(`http://localhost:8080/api/planner/${plannerIdx}`)
       .then((res) => {
-        res && res.data && setPlanner(res.data);
-        setTitle(res.data.title);
-        setContents(res.data.contents);
+        if (res.status === 200) {
+          setPlanner(res.data);
+          setTitle(res.data.title);
+          setContents(res.data.contents);
+          setDetails(res.data.details);
+          setStartDate(res.data.startDate);
+          setEndDate(res.data.endDate);
+          setLocation(res.data.location);
+        }
       })
-      .catch((err) => console.log(err));
-  }, []);
+      .catch((err) => {
+        if (err.response && err.response.status === 404) {
+          console.log(err.response.data.message);
+        } else {
+          console.log(err);
+        }
+      });
+  }, [plannerIdx]);
 
   return (
     <>
       <div className="container">
         <h2>게시판 상세</h2>
-        <form id="frm" method="post">
-          <input type="hidden" id="plannerIdx" name="plannerIdx" />
+        <form id="frm" method="post" enctype="multipart/form-data" >
+          <input type="hidden" id="plannerIdx" name="plannerIdx" value={planner.plannerIdx} />
 
           <table className="board_detail">
             <colgroup>
@@ -90,6 +113,42 @@ export default function PlannerDetail() {
                 </td>
               </tr>
               <tr>
+                <th scope="row">시작 날짜</th>
+                <td colSpan="3">
+                  <input
+                    type="date"
+                    id="startDate"
+                    name="startDate"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">종료 날짜</th>
+                <td colSpan="3">
+                  <input
+                    type="date"
+                    id="endDate"
+                    name="endDate"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">지역</th>
+                <td colSpan="3">
+                  <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                  />
+                </td>
+              </tr>
+              <tr>
                 <td colSpan="4">
                   <textarea
                     id="contents"
@@ -99,17 +158,21 @@ export default function PlannerDetail() {
                   ></textarea>
                 </td>
               </tr>
+              <tr>
+                <th scope="row">상세 설명</th>
+                <td colSpan="4">
+                  <textarea
+                    id="details"
+                    name="details"
+                    value={details}
+                    onChange={(e) => setDetails(e.target.value)}
+                  ></textarea>
+                </td>
+              </tr>
             </tbody>
           </table>
         </form>
-        <div className="file_list">
-          {planner.fileInfoList &&
-            planner.fileInfoList.map((fileInfo) => (
-              <p>
-                {fileInfo.originalFileName} ({fileInfo.fileSize}kb)
-              </p>
-            ))}
-        </div>
+      
 
         <input
           type="button"

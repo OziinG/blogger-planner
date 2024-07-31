@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from '../../node_modules/react-router-dom/dist/index';
+import "./join.css"
 
 const Join = () => {
+
+    const navigate =useNavigate();
     const [form, setForm] = useState({
         username: '',
         password: '',
@@ -20,20 +24,38 @@ const Join = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('/joinProc', form)
-            .then(response => {
-                alert('회원가입 성공');
-            })
-            .catch(error => {
-                console.error('There was an error!', error);
-            });
+
+        if (form.password !== form.passwordConfirm) {
+            alert("Passwords do not match");
+            return;
+        }
+
+        const joinDto = {
+            username: form.username,
+            password: form.password,
+            name: form.name,
+            email: form.email
+        };
+
+        axios.post('http://localhost:8080/joinProc', joinDto, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+        .then(response => {
+            alert('회원가입 성공');
+            navigate("/login");
+        })
+        .catch(error => {
+            console.error('There was an error!', error);
+            alert('회원가입 실패');
+        });
     };
 
     return (
-        <div className="container">
+        <div className="container" style={{ marginTop: '50px' }}>
             <h2>Create Your Account</h2>
             <form onSubmit={handleSubmit}>
-                <input type="hidden" name="_csrf" value={document.querySelector('meta[name="_csrf"]').content} />
                 <label htmlFor="username">Username</label>
                 <input type="text" id="username" name="username" placeholder="Enter your username" required value={form.username} onChange={handleChange} />
                 <label htmlFor="password">Password</label>

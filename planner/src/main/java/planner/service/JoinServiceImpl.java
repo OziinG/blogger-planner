@@ -28,10 +28,6 @@ public class JoinServiceImpl implements JoinService {
 		if (userRepository.existsByUsername(joinDto.getUsername()))
 			return false;
 		
-		// 패스워드와 패스워드 확인이 일치하는지 확인
-		if (!joinDto.checkPassword())
-			return false;
-		
 		// JoinDto의 값을 UserEntity에 설정 
 		UserEntity userEntity = new ModelMapper().map(joinDto, UserEntity.class);
 

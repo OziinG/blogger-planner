@@ -19,8 +19,9 @@ const Login = () => {
       });
 
       // 응답에서 토큰 추출 및 로컬 스토리지에 저장
-      const token = response.headers.token;
-      localStorage.setItem("token", token);
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
       navigate("/planner");
     } catch (err) {

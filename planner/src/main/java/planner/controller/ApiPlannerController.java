@@ -21,13 +21,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import planner.dto.PlannerDto;
 import planner.dto.PlannerListResponse;
 import planner.entity.PlannerEntity;
 import planner.entity.PlannerFileEntity;
@@ -54,16 +53,14 @@ public class ApiPlannerController {
 
         return new ResponseEntity<>(results, HttpStatus.OK);
     }
-
+    
     @Operation(summary = "게시물 등록", description = "새로운 게시물을 등록합니다.")
-    @PostMapping("/planner")
-    public ResponseEntity<Void> insertPlanner(
-            @RequestPart("data") PlannerEntity plannerEntity,
-            @RequestPart("files") MultipartHttpServletRequest request) throws Exception {
-        plannerService.insertPlanner(plannerEntity, request);
+    @PostMapping("/planner/write")
+    public ResponseEntity<Void> insertPlannerApi(
+            @RequestBody PlannerDto plannerDto) throws Exception {
+        plannerService.insertPlanner(plannerDto); 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
 
     @Operation(summary = "게시물 상세 조회", description = "특정 게시물의 상세 정보를 조회합니다.")
     @GetMapping("/planner/{plannerIdx}")
@@ -83,10 +80,9 @@ public class ApiPlannerController {
     @PutMapping("/planner/{plannerIdx}")
     public ResponseEntity<Void> updatePlanner(
             @PathVariable("plannerIdx") int plannerIdx,
-            @RequestBody PlannerEntity plannerEntity,
-            MultipartHttpServletRequest request) throws Exception {
+            @RequestBody PlannerEntity plannerEntity) throws Exception {
         plannerEntity.setPlannerIdx(plannerIdx);
-        plannerService.updatePlanner(plannerEntity, request);
+        plannerService.updatePlanner(plannerEntity);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

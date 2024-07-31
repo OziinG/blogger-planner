@@ -4,15 +4,20 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import lombok.extern.slf4j.Slf4j;
 import planner.common.FileUtils;
+import planner.dto.PlannerDto;
 import planner.entity.PlannerEntity;
 import planner.entity.PlannerFileEntity;
 import planner.repository.PlannerRepository;
@@ -39,21 +44,37 @@ public class PlannerServiceImpl implements PlannerService {
     }
 
     @Override
-    public void insertPlanner(PlannerEntity plannerEntity, MultipartHttpServletRequest request) throws Exception {
-        addFilesToPlanner(plannerEntity, request);
-        plannerEntity.setCreatorId(getAuthenticatedUsername());
+    public void insertPlanner(PlannerDto plannerDto) throws Exception {
+        PlannerEntity plannerEntity = new ModelMapper().map(plannerDto, PlannerEntity.class);
+        
+
+        plannerEntity.setCreatorId(plannerDto.getCreatorId());
         plannerRepository.save(plannerEntity);
     }
 
+    
     @Override
-    public void updatePlanner(PlannerEntity plannerEntity, MultipartHttpServletRequest request) throws Exception {
-        PlannerEntity existingPlanner = getExistingPlanner(plannerEntity.getPlannerIdx());
-        validateUserPermission(existingPlanner);
+    public void updatePlanner(PlannerEntity plannerEntity) throws Exception {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        PlannerEntity existingPlanner = plannerRepository.findById(plannerEntity.getPlannerIdx())
+                .orElseThrow(() -> new Exception("일치하는 데이터가 없음"));
 
-        updatePlannerDetails(existingPlanner, plannerEntity);
-        addFilesToPlanner(existingPlanner, request);
+        boolean isAdmin = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
-        existingPlanner.setUpdatorId(getAuthenticatedUsername());
+        if (!username.equals(existingPlanner.getCreatorId()) && !isAdmin) {
+            throw new AccessDeniedException("You do not have permission to update this planner");
+        }
+
+        existingPlanner.setTitle(plannerEntity.getTitle());
+        existingPlanner.setContents(plannerEntity.getContents());
+        existingPlanner.setStartDate(plannerEntity.getStartDate());
+        existingPlanner.setEndDate(plannerEntity.getEndDate());
+        existingPlanner.setLocation(plannerEntity.getLocation());
+        existingPlanner.setDetails(plannerEntity.getDetails());
+
+
+        existingPlanner.setUpdatorId(username);
         existingPlanner.setUpdatedDatetime(LocalDateTime.now());
 
         plannerRepository.save(existingPlanner);
@@ -80,43 +101,5 @@ public class PlannerServiceImpl implements PlannerService {
         } else {
             throw new Exception("일치하는 데이터가 없음");
         }
-    }
-
-    private void addFilesToPlanner(PlannerEntity plannerEntity, MultipartHttpServletRequest request) throws Exception {
-        List<PlannerFileEntity> list = fileUtils.parseFileInfo(request);
-        if (list != null) {
-            for (PlannerFileEntity file : list) {
-                file.setPlanner(plannerEntity);
-            }
-            plannerEntity.setFileInfoList(list);
-        }
-    }
-
-    private PlannerEntity getExistingPlanner(int plannerIdx) throws Exception {
-        return plannerRepository.findById(plannerIdx)
-                .orElseThrow(() -> new Exception("일치하는 데이터가 없음"));
-    }
-
-    private void validateUserPermission(PlannerEntity plannerEntity) {
-        String username = getAuthenticatedUsername();
-        boolean isAdmin = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-
-        if (!username.equals(plannerEntity.getCreatorId()) && !isAdmin) {
-            throw new AccessDeniedException("You do not have permission to update this planner");
-        }
-    }
-
-    private void updatePlannerDetails(PlannerEntity existingPlanner, PlannerEntity updatedPlanner) {
-        existingPlanner.setTitle(updatedPlanner.getTitle());
-        existingPlanner.setContents(updatedPlanner.getContents());
-        existingPlanner.setStartDate(updatedPlanner.getStartDate());
-        existingPlanner.setEndDate(updatedPlanner.getEndDate());
-        existingPlanner.setLocation(updatedPlanner.getLocation());
-        existingPlanner.setDetails(updatedPlanner.getDetails());
-    }
-
-    private String getAuthenticatedUsername() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }

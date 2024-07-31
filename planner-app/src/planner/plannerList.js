@@ -1,36 +1,47 @@
-import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { jwtDecode } from "../../node_modules/jwt-decode/build/cjs/index";
+import "./list.css"
 
 const PlannerList = () => {
   const [planners, setPlanners] = useState([]);
-  
+  const navigate = useNavigate();
+
+  // JWT 토큰에서 사용자 정보를 추출
+  const token = localStorage.getItem("token");
+  let creatorId = null;
+  if (token) {
+    const decodedToken = jwtDecode(token);
+    creatorId = decodedToken.sub; // 일반적으로 'sub' 클레임에 사용자 ID가 저장됩니다.
+  }
+
   useEffect(() => {
-    // 로컬 스토리지에서 토큰 가져오기
-    const token = localStorage.getItem("token");
-    
     axios
       .get("http://localhost:8080/api/planner", {
-        headers: {
-          Authorization: `Bearer ${token}`,  // Authorization 헤더에 토큰 추가
-        },
+        headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
         console.log(res);
         res && res.data && setPlanners(res.data);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [token]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/home");
+  };
 
   return (
     <>
       <div className="container">
         <h2>게시판 목록</h2>
-        <p>
-          {/* 사용자 정보 표시를 위한 부분 */}
-          {/* {session.user.username} ({session.user.name} / {session.user.email}) */}
-        </p>
-        <table className="board_list">
+        <p>{creatorId}님 안녕하세요!</p>
+        <button onClick={handleLogout} className="btn">
+          로그아웃
+        </button>
+        <table className="planner_list">
           <colgroup>
             <col width="15%" />
             <col width="*" />
@@ -51,12 +62,12 @@ const PlannerList = () => {
                 <tr key={planner.plannerIdx}>
                   <td>{planner.plannerIdx}</td>
                   <td className="title">
-                    <Link to={`/detail/${planner.plannerIdx}`}>
+                    <Link to={`/planner/${planner.plannerIdx}`}>
                       {planner.title}
                     </Link>
                   </td>
                   <td>{planner.hitCnt}</td>
-                  <td>{planner.createdDatetime}</td>
+                  <td>{new Date(planner.createdDatetime).toLocaleDateString()}</td>
                 </tr>
               ))}
             {planners.length === 0 && (
@@ -67,12 +78,10 @@ const PlannerList = () => {
           </tbody>
         </table>
         <div>
-          <p />
-          <Link to={"/write"} className="btn">
+          <Link to="/write" className="btn">
             글쓰기
           </Link>
-          <p />
-          <Link to={"/home"} className="btn">
+          <Link to="/home" className="btn">
             메인화면으로
           </Link>
         </div>
