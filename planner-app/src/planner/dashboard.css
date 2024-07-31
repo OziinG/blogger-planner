@@ -1,0 +1,87 @@
+.dashboard-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-top: 70px;
+  }
+  
+  .dashboard-header nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .dashboard-header nav a:hover {
+    text-decoration: underline;
+  }
+  
+  .overview {
+    margin-bottom: 20px;
+  }
+  
+  .overview-cards {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .card {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 30%;
+    text-align: center;
+  }
+  
+  .quick-links {
+    text-align: center;
+  }
+  
+  .quick-links .links a {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+  }
+  
+  .logout-link {
+    cursor: pointer;
+    color: #333;
+    text-decoration: none;
+    margin: 0 10px;
+  }
+  
+  .logout-link:hover {
+    text-decoration: underline;
+  }
+  
+  .events-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .events-table th, .events-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .events-table th {
+    background-color: #f4f4f4;
+  }
+  
+  .events-table tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  

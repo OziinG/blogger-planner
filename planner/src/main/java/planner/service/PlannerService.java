@@ -24,4 +24,6 @@ public interface PlannerService {
 	PlannerFileEntity selectPlannerFileInfo(int idx, int plannerIdx);
 
 	PlannerEntity selectPlannerDetail(int plannerIdx) throws Exception;
+
+	List<PlannerEntity> getTodayEvents();
 }

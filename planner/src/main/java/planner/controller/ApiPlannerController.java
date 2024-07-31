@@ -42,7 +42,7 @@ public class ApiPlannerController {
 
     @Operation(summary = "게시판 목록 조회", description = "등록된 게시물 목록을 조회해서 반환합니다.")
     @GetMapping("/planner")
-    public ResponseEntity<List<PlannerListResponse>> openPlannerList() throws Exception {
+    public List<PlannerEntity> openPlannerList() throws Exception {
         List<PlannerEntity> plannerList = plannerService.selectPlannerList();
         List<PlannerListResponse> results = new ArrayList<>();
         ModelMapper modelMapper = new ModelMapper();
@@ -51,7 +51,13 @@ public class ApiPlannerController {
             results.add(modelMapper.map(dto, PlannerListResponse.class));
         });
 
-        return new ResponseEntity<>(results, HttpStatus.OK);
+        return plannerService.selectPlannerList();
+    }
+    
+    @Operation(summary = "오늘 일정 게시물 조회", description = "오늘 날짜에 시작하는 일정을 불러옵니다.")
+    @GetMapping("dashboard/today")
+    public List<PlannerEntity> getTodayEvents() {
+        return plannerService.getTodayEvents();
     }
     
     @Operation(summary = "게시물 등록", description = "새로운 게시물을 등록합니다.")

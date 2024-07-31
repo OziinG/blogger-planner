@@ -52,6 +52,7 @@ const PlannerList = () => {
             <tr>
               <th scope="col">글번호</th>
               <th scope="col">제목</th>
+              <th scope="col">여행지</th>
               <th scope="col">조회수</th>
               <th scope="col">작성일</th>
             </tr>
@@ -66,6 +67,7 @@ const PlannerList = () => {
                       {planner.title}
                     </Link>
                   </td>
+                  <td>{planner.location}</td>
                   <td>{planner.hitCnt}</td>
                   <td>{new Date(planner.createdDatetime).toLocaleDateString()}</td>
                 </tr>
@@ -80,9 +82,6 @@ const PlannerList = () => {
         <div>
           <Link to="/write" className="btn">
             글쓰기
-          </Link>
-          <Link to="/home" className="btn">
-            메인화면으로
           </Link>
         </div>
       </div>

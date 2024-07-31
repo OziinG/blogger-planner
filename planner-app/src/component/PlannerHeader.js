@@ -5,11 +5,12 @@ import './PlannerHeader.css';
 const PlannerHeader = () => {
   const token = localStorage.getItem('token');
 
+
   return (
     <header className="header">
       <h1>
         {token ? (
-          <Link to="/planner">Planner</Link>
+          <Link to="/dashboard">Planner</Link>
         ) : (
           <Link to="/home">Planner</Link>
         )}

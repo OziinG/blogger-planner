@@ -11,6 +11,7 @@ import PlannerDetail from "./planner/plannerDetail";
 import PlannerWrite from "./planner/plannerWrite";
 import PrivateRoute from "./component/PrivateRoute";
 import PlannerHeader from "./component/PlannerHeader";
+import Dashboard from "./planner/dashboard";
 
 // axios 기본 설정
 axios.defaults.baseURL = 'http://localhost:8080';
@@ -30,6 +31,14 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/join" element={<Join />} />
           
+          <Route 
+            path="/dashboard" 
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            } 
+          />
           <Route 
             path="/planner" 
             element={

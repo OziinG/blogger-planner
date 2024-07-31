@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./login.css";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -22,20 +23,20 @@ const Login = () => {
       const token = response.data.token;
       localStorage.setItem('token', token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-      navigate("/planner");
+      alert(token)
+      navigate("/dashboard");
     } catch (err) {
       setError("Invalid login credentials");
     }
   };
 
   return (
-    <div className="container">
+    <div className="login-container">
       <h1>로그인</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
+      {error && <p className="error">{error}</p>}
+      <form className="login-form" onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="username">계정명</label>
+          <label htmlFor="username">아이디</label>
           <input
             type="text"
             id="username"
@@ -47,12 +48,12 @@ const Login = () => {
           />
         </div>
         <div>
-          <label htmlFor="password">암호</label>
+          <label htmlFor="password">비밀번호</label>
           <input
             type="password"
             id="password"
             name="password"
-            placeholder="패스워드를 입력하세요."
+            placeholder="비밀번호를 입력하세요."
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required

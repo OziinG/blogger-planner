@@ -18,4 +18,6 @@ public interface PlannerRepository extends JpaRepository<PlannerEntity, Integer>
     @Query("SELECT file FROM PlannerFileEntity file WHERE file.idx = :idx AND file.planner.plannerIdx = :plannerIdx")
     public PlannerFileEntity findPlannerFile(@Param("idx") int idx, @Param("plannerIdx") int plannerIdx);
 
+    List<PlannerEntity> findByStartDate(String startDate);
+
 }
