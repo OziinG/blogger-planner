@@ -1,18 +1,12 @@
 package planner.entity;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,10 +38,6 @@ public class PlannerEntity {
     private LocalDateTime updatedDatetime;
 
     private String updatorId;
-
-    @OneToMany(mappedBy = "planner", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private Collection<PlannerFileEntity> fileInfoList;
 
     private String startDate;
 

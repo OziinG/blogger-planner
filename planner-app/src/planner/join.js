@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from '../../node_modules/react-router-dom/dist/index';
-import "./join.css"
+import "./css/join.css"
+import { useNavigate } from "react-router-dom";
+
+
 
 const Join = () => {
 
-    const navigate =useNavigate();
+    const navigate = useNavigate();
     const [form, setForm] = useState({
         username: '',
         password: '',
@@ -36,24 +38,27 @@ const Join = () => {
             name: form.name,
             email: form.email
         };
-
+        console.log(joinDto);
         axios.post('http://localhost:8080/joinProc', joinDto, {
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+                'Content-Type': 'application/json'
             }
         })
-        .then(response => {
+
+        .then(res => {
+            
             alert('회원가입 성공');
-            navigate("/login");
+            navigate('/login');
         })
         .catch(error => {
             console.error('There was an error!', error);
             alert('회원가입 실패');
+
         });
     };
 
     return (
-        <div className="container" style={{ marginTop: '50px' }}>
+        <div className="container" style={{ marginTop: '80px' }}>
             <h2>Create Your Account</h2>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="username">Username</label>

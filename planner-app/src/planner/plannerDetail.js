@@ -1,6 +1,7 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import './css/detail.css';  // Import the CSS file
 
 export default function PlannerDetail() {
   const [planner, setPlanner] = useState({});
@@ -10,7 +11,6 @@ export default function PlannerDetail() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [location, setLocation] = useState("");
-  const refFiles = useRef();
   const { plannerIdx } = useParams();
   const navigate = useNavigate();
 
@@ -34,7 +34,7 @@ export default function PlannerDetail() {
     axios
       .put(`http://localhost:8080/api/planner/${plannerIdx}`, updatedPlanner)
       .then((res) => {
-        res && res.status === 200 && navigate("/planner");
+        res && res.status === 200 && navigate(-1);
       })
       .catch((err) => console.log(err));
   };
@@ -45,7 +45,7 @@ export default function PlannerDetail() {
     axios
       .delete(`http://localhost:8080/api/planner/${plannerIdx}`)
       .then((res) => {
-        res && res.status === 204 && navigate("/planner");
+        res && res.status === 204 && navigate(-1);
       })
       .catch((err) => console.log(err));
   };
@@ -75,12 +75,12 @@ export default function PlannerDetail() {
 
   return (
     <>
-      <div className="container">
-        <h2>게시판 상세</h2>
-        <form id="frm" method="post" enctype="multipart/form-data" >
-          <input type="hidden" id="plannerIdx" name="plannerIdx" value={planner.plannerIdx} />
+      <div className="planner-container">
+        <h2 className="planner-title">일정 계획 상세</h2>
+        <form id="frm" method="post" encType="multipart/form-data" className="planner-form">
+          <input type="hidden" id="plannerIdx" name="plannerIdx" value={planner.plannerIdx || ""} />
 
-          <table className="board_detail">
+          <table className="board-detail">
             <colgroup>
               <col width="15%" />
               <col width="*" />
@@ -96,9 +96,8 @@ export default function PlannerDetail() {
               </tr>
               <tr>
                 <th scope="row">작성자</th>
-                <td>{planner.creatorId}</td>
-                <th scope="row">작성일</th>
-                <td>{planner.createDatetime}</td>
+                <td colSpan="3">{planner.creatorId}</td>
+
               </tr>
               <tr>
                 <th scope="row">제목</th>
@@ -107,6 +106,7 @@ export default function PlannerDetail() {
                     type="text"
                     id="title"
                     name="title"
+                    className="input-field"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                   />
@@ -119,6 +119,7 @@ export default function PlannerDetail() {
                     type="date"
                     id="startDate"
                     name="startDate"
+                    className="input-field"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
                   />
@@ -131,6 +132,7 @@ export default function PlannerDetail() {
                     type="date"
                     id="endDate"
                     name="endDate"
+                    className="input-field"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
                   />
@@ -143,19 +145,10 @@ export default function PlannerDetail() {
                     type="text"
                     id="location"
                     name="location"
+                    className="input-field"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
                   />
-                </td>
-              </tr>
-              <tr>
-                <td colSpan="4">
-                  <textarea
-                    id="contents"
-                    name="contents"
-                    value={contents}
-                    onChange={(e) => setContents(e.target.value)}
-                  ></textarea>
                 </td>
               </tr>
               <tr>
@@ -164,37 +157,52 @@ export default function PlannerDetail() {
                   <textarea
                     id="details"
                     name="details"
+                    className="textarea-field"
                     value={details}
                     onChange={(e) => setDetails(e.target.value)}
                   ></textarea>
                 </td>
               </tr>
+              <tr>
+
+                <td colSpan="4">
+                  <textarea
+                    id="contents"
+                    name="contents"
+                    className="textarea-field"
+                    value={contents}
+                    onChange={(e) => setContents(e.target.value)}
+                  ></textarea>
+                </td>
+              </tr>
+
             </tbody>
           </table>
         </form>
       
-
-        <input
-          type="button"
-          id="list"
-          className="btn"
-          value="목록으로"
-          onClick={listButtonClick}
-        />
-        <input
-          type="button"
-          id="update"
-          className="btn"
-          value="수정하기"
-          onClick={updateButtonClick}
-        />
-        <input
-          type="button"
-          id="delete"
-          className="btn"
-          value="삭제하기"
-          onClick={deleteButtonClick}
-        />
+        <div className="button-group">
+          <input
+            type="button"
+            id="list"
+            className="btn"
+            value="목록으로"
+            onClick={listButtonClick}
+          />
+          <input
+            type="button"
+            id="update"
+            className="btn"
+            value="수정하기"
+            onClick={updateButtonClick}
+          />
+          <input
+            type="button"
+            id="delete"
+            className="btn"
+            value="삭제하기"
+            onClick={deleteButtonClick}
+          />
+        </div>
       </div>
     </>
   );

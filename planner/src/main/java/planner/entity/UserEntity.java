@@ -23,5 +23,4 @@ public class UserEntity {
 	private String email;
 	
 	private String role; //사용자 권한을 저장
-
 }

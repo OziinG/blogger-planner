@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import planner.dto.JoinDto;
 import planner.entity.UserEntity;
 import planner.repository.UserRepository;
 
+@Slf4j
 @Service
 public class JoinServiceImpl implements JoinService {
 	
@@ -24,7 +26,6 @@ public class JoinServiceImpl implements JoinService {
 	
 	@Override
 	public boolean joinProcess(JoinDto joinDto) {
-		// 동일한 username을 사용하고 있는지 확인
 		if (userRepository.existsByUsername(joinDto.getUsername()))
 			return false;
 		
@@ -44,5 +45,3 @@ public class JoinServiceImpl implements JoinService {
 		}
 	}
 }
-
-	

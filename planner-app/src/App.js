@@ -1,8 +1,8 @@
 import "./App.css";
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import axios from 'axios';
+import axios from "axios";
 import Login from "./planner/login";
 import Home from "./planner/home";
 import Join from "./planner/join";
@@ -12,12 +12,13 @@ import PlannerWrite from "./planner/plannerWrite";
 import PrivateRoute from "./component/PrivateRoute";
 import PlannerHeader from "./component/PlannerHeader";
 import Dashboard from "./planner/dashboard";
+import MyCalendar from "./planner/myCalendar";
 
 // axios 기본 설정
-axios.defaults.baseURL = 'http://localhost:8080';
-const token = localStorage.getItem('token');
+axios.defaults.baseURL = "http://localhost:8080";
+const token = localStorage.getItem("token");
 if (token) {
-  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 }
 
 function App() {
@@ -30,38 +31,46 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/join" element={<Join />} />
-          
-          <Route 
-            path="/dashboard" 
+
+          <Route
+            path="/dashboard"
             element={
               <PrivateRoute>
                 <Dashboard />
               </PrivateRoute>
-            } 
+            }
           />
-          <Route 
-            path="/planner" 
+          <Route
+            path="/planner"
             element={
               <PrivateRoute>
                 <PlannerList />
               </PrivateRoute>
-            } 
+            }
           />
-          <Route 
-            path="/planner/:plannerIdx" 
+          <Route
+            path="/planner/:plannerIdx"
             element={
               <PrivateRoute>
                 <PlannerDetail />
               </PrivateRoute>
-            } 
+            }
           />
-          <Route 
-            path="/write" 
+          <Route
+            path="/write"
             element={
               <PrivateRoute>
                 <PlannerWrite />
               </PrivateRoute>
-            } 
+            }
+          />
+          <Route
+            path="calendar"
+            element={
+              <PrivateRoute>
+                <MyCalendar />
+              </PrivateRoute>
+            }
           />
         </Routes>
       </div>

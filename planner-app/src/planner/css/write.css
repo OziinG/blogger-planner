@@ -1,0 +1,104 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.board_detail {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.board_detail td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.board_detail input[type="text"],
+.board_detail textarea {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.date-picker-container {
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+.date-picker-container > div {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+}
+
+.date-picker-container .date-picker-label {
+    text-align: center;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.date-display-container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.date-display {
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+    margin: 0 10px;
+    
+}
+.react-datepicker-wrapper {
+    width: 100%;
+}
+
+.react-datepicker {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.sub-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 20px;
+    text-align: center;
+    background-color: gray;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.sub-btn:hover {
+    background-color: darkgray;
+}
+
+.date-display{
+    align-self: left;
+    margin-top: 20px;
+    font-size: 16px;
+
+}

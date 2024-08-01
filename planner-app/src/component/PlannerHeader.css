@@ -1,29 +1,33 @@
-/* Header.css */
-.header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #f8f9fa;
-    padding: 10px 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    font-family: 'NanumGothic', '나눔고딕', dotum, "Helvetica Neue", Helvetica,
 
-  }
-  
-  .header h1 {
-    margin: 0;
-    font-size: 24px;
-  }
-  
-  .header h1 a{
-    text-decoration: none;
-    color: #656565;
-  }
-  
-  .header h1 a:hover {
-    text-decoration: underline;
-  }
-  
+@CHARSET "UTF-8";
+
+.h1-planner:hover {
+  text-decoration: underline;
+}
+
+.header {
+  position: fixed; /* 'absolute'에서 'fixed'로 변경하여 스크롤과 관계없이 고정 */
+  top: 0;
+  left: 0;
+  width: 100%; /* 전체 너비를 차지하도록 설정 */
+  background-color: #f8f9fa;
+  padding: 15px 20px; /* 오른쪽 여백을 추가하여 좌우 스크롤 방지 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  z-index: 1000; /* 헤더가 다른 요소 위에 있도록 설정 */
+}
+
+.header h1 {
+  margin: 10px;
+  font-size: 30px;
+}
+
+.header h1 a {
+  text-decoration: none;
+  color: #656565;
+}
+
+.header h1 a:hover {
+  text-decoration: underline;
+}

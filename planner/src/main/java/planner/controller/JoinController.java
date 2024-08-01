@@ -1,15 +1,17 @@
 package planner.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import planner.dto.JoinDto;
 import planner.service.JoinService;
 
-@Controller
+@RestController
 public class JoinController {
+	
     @Autowired
     JoinService joinService;
     
@@ -18,12 +20,13 @@ public class JoinController {
 		return "/join";
 	}
 	
-	@PostMapping("/joinProc")
-	public String joinProc(JoinDto joinDto) {
-		if (joinService.joinProcess(joinDto)) {
-			return "redirect:/login";
-		} else {
-			return "redirect:/join";
-		}
-	}
+    @PostMapping("/joinProc")
+    public String joinProc(@RequestBody JoinDto joinDto) {
+        if (joinService.joinProcess(joinDto)) {
+            return "redirect:/";
+        } else {
+            return "redirect:/login";
+        }
+    }
+
 }

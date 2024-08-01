@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./login.css";
-
+import "./css/login.css";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -23,10 +22,9 @@ const Login = () => {
       const token = response.data.token;
       localStorage.setItem('token', token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      alert(token)
       navigate("/dashboard");
     } catch (err) {
-      setError("Invalid login credentials");
+        setError("Invalid login credentials");
     }
   };
 
@@ -35,7 +33,7 @@ const Login = () => {
       <h1>로그인</h1>
       {error && <p className="error">{error}</p>}
       <form className="login-form" onSubmit={handleSubmit}>
-        <div>
+        <div className="login-content">
           <label htmlFor="username">아이디</label>
           <input
             type="text"
@@ -47,7 +45,7 @@ const Login = () => {
             required
           />
         </div>
-        <div>
+        <div className="login-content">
           <label htmlFor="password">비밀번호</label>
           <input
             type="password"

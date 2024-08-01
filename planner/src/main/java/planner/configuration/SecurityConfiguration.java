@@ -3,20 +3,17 @@ package planner.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import planner.security.CustomAccessDeniedHandler;
 import planner.security.CustomAuthenticationSuccessHandler;
 import planner.security.JwtRequestFilter;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
 	@Autowired
@@ -24,9 +21,6 @@ public class SecurityConfiguration {
 	
 	@Autowired
 	private JwtRequestFilter jwtRequestFilter;
-
-	@Autowired
-    private CustomAccessDeniedHandler accessDeniedHandler;
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -45,11 +39,7 @@ public class SecurityConfiguration {
 		
 		.logout((auth) -> 
 			auth
-				.logoutUrl("/logout"))
-		
-		.exceptionHandling((exceptionHandling) -> 
-			exceptionHandling
-				.accessDeniedHandler(accessDeniedHandler)); // 커스텀 AccessDeniedHandler 설정
+				.logoutUrl("/logout"));
 
 		http
 	 	.csrf((auth) -> auth.disable());

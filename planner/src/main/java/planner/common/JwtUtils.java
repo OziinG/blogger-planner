@@ -38,12 +38,12 @@ public class JwtUtils {
 				.claim("name", userEntity.getName())
 				.claim("email", userEntity.getEmail())
 				.claim("sub", userEntity.getUsername())
+				.claim("role", userEntity.getRole())
 				.claim("jti", String.valueOf(userEntity.getSeq()))
 				.claim("iat", Date.from(now))
 				.claim("exp", Date.from(now.plus(expirationTime, ChronoUnit.MILLIS)))
 				.signWith(hmacKey)
 				.compact();
-		log.debug(jwtToken);		
 		
 		return jwtToken;
 	}
